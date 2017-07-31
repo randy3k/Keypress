@@ -15,5 +15,5 @@ class TestKeypress(DeferrableTestCase):
 
     def test_keypress_123(self):
         self.view.window().run_command("keypress", {"string": "123"})
-        yield 1000
+        yield 3000
         self.assertEqual(self.view.substr(sublime.Region(0, self.view.size())), "123")
