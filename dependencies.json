@@ -1,0 +1,12 @@
+{
+    "linux": {
+        "*": [
+            "xdotool"
+        ]
+    },
+    "windows": {
+        "*": [
+            "python-pywin32"
+        ]
+    }
+}
