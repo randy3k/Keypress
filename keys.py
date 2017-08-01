@@ -2,51 +2,33 @@ import sublime
 
 
 if sublime.platform() == "osx":
-    canonical_names = {
-        'escape': 'esc',
-        'enter': 'return',
-        'del': 'delete'
-    }
+    os_keyname = {}
 
 elif sublime.platform() == "windows":
-    canonical_names = {}
+    os_keyname = {}
 
 elif sublime.platform() == "linux":
-    canonical_names = {
+    os_keyname = {
         'enter': "Return",
-        'return': "Return"
+        'tab': "Tab",
+        'space': "Space",
+        'delete': "Delete",
+        'escape': 'Escape',
+        'up': 'Up',
+        'down': 'Down',
+        'left': 'Left',
+        'right': 'Right',
+        'home': 'Home',
+        'end': 'End',
+        'pageup': 'Prior',
+        'pagedown': 'Next',
+        'backspace': "Backspace"
     }
 
 
 def canonicalize_key(key):
-    key = key.lower()
-    if key in canonical_names:
-        key = canonical_names[key]
+    eachkey = key.split("+")
+    if eachkey[-1] in os_keyname:
+        eachkey[-1] = os_keyname[eachkey[-1]]
 
-    return key
-
-
-_osx_keycode = {
-    'return': 0x24,
-    'tab': 0x30,
-    'space': 0x31,
-    'delete': 0x33,
-    'esc': 0x35,
-    'up': 0x7E,
-    'down': 0x7D,
-    'left': 0x7B,
-    'right': 0x7C,
-    'home': 0x73,
-    'end': 0x77,
-    'page up': 0x74,
-    'page down': 0x79,
-}
-
-
-def osx_keycode(key):
-    if key in _osx_keycode:
-        return _osx_keycode[key]
-    elif len(key) == 1 and ord(key) < 128:
-        return ord(key)
-    else:
-        raise ValueError("Key '{}' not found.".format(key))
+    return "+".join(eachkey)
