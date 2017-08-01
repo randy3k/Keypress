@@ -2,25 +2,49 @@ import sublime
 import sublime_plugin
 import subprocess
 
-if sublime.platform() == "linux":
-    from xdotool import xdotool
 
-if sublime.platform() == "windows":
-    import win32com.client
+if sublime.platform() == "osx":
+    from .code import osx_keycode
+else:
+    from . import keyboard
 
 
 class KeypressCommand(sublime_plugin.WindowCommand):
-    def run(self, string=""):
+    def run(self, string=None, key=None):
+        if not string and not key:
+            return
+
         if sublime.platform() == "osx":
-            script = """
-                tell application "System Events"
-                    keystroke "{}"
-                end tell
-            """.format(string.replace("\"", "\\\""))
+            if string:
+                script = """
+                    tell application "System Events"
+                        keystroke "{}"
+                    end tell
+                """.format(string.replace("\"", "\\\""))
+            elif key:
+                modifiers = []
+                if "shift" in key:
+                    modifiers.append("shift down")
+                if "ctrl" in key:
+                    modifiers.append("control down")
+                if "alt" in key:
+                    modifiers.append("option down")
+                if "super" in key:
+                    modifiers.append("command down")
+                modifiers_str = "using {" + ",".join(modifiers) + "}" if modifiers else ""
+
+                key = key.split("+")[-1]
+                script = """
+                    tell application "System Events"
+                        key code {} {}
+                    end tell
+                """.format(str(int(osx_keycode(key))), modifiers_str)
+
             args = ["osascript", "-e", script]
             subprocess.Popen(args)
-        elif sublime.platform() == "linux":
-            xdotool("type", string)
-        elif sublime.platform() == "windows":
-            shell = win32com.client.Dispatch("WScript.Shell")
-            shell.SendKeys(string)
+
+        else:
+            if string:
+                keyboard.write(string)
+            elif key:
+                keyboard.press_and_release(key)
