@@ -2,9 +2,10 @@ import sublime
 import sublime_plugin
 import subprocess
 
+from .keys import canonicalize_key
 
 if sublime.platform() == "osx":
-    from .code import osx_keycode
+    from .keys import osx_keycode
 elif sublime.platform() == "windows":
     from . import keyboard
 elif sublime.platform() == "linux":
@@ -15,6 +16,8 @@ class KeypressCommand(sublime_plugin.WindowCommand):
     def run(self, string=None, key=None):
         if not string and not key:
             return
+        if key:
+            key = canonicalize_key(key)
 
         if sublime.platform() == "osx":
             if string:
