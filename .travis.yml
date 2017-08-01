@@ -17,6 +17,8 @@ matrix:
 
 
 before_install:
+    - python -c 'import ctypes;import ctypes.util; ctypes.CDLL(ctypes.util.find_library("xdo"))'
+    - python -c 'import ctypes;import ctypes.util; ctypes.CDLL(ctypes.util.find_library("X11"))'
     - curl -OL https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/travis.sh
     # enable gui, see https://docs.travis-ci.com/user/gui-and-headless-browsers
     - if [ "$TRAVIS_OS_NAME" == "linux"  ]; then

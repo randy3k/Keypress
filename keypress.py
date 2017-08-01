@@ -5,8 +5,10 @@ import subprocess
 
 if sublime.platform() == "osx":
     from .code import osx_keycode
-else:
+elif sublime.platform() == "windows":
     from . import keyboard
+elif sublime.platform() == "linux":
+    from . import xdo
 
 
 class KeypressCommand(sublime_plugin.WindowCommand):
@@ -43,8 +45,15 @@ class KeypressCommand(sublime_plugin.WindowCommand):
             args = ["osascript", "-e", script]
             subprocess.Popen(args)
 
-        else:
+        elif sublime.platform() == "windows":
             if string:
                 keyboard.write(string)
             elif key:
                 keyboard.press_and_release(key)
+
+        elif sublime.platform() == "linux":
+            xintance = xdo.Xdo()
+            if string:
+                xintance.enter_text_window(xdo.CURRENTWINDOW, string)
+            elif key:
+                xintance.send_keysequence_window(xdo.CURRENTWINDOW, key)
