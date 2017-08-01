@@ -159,5 +159,6 @@ def aggregate_devices(type_name):
 
 
 def ensure_root():
-    if os.geteuid() != 0:
-        raise ImportError('You must be root to use this library on linux.')
+    pass
+    # if os.geteuid() != 0:
+        # raise ImportError('You must be root to use this library on linux.')

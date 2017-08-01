@@ -9,7 +9,7 @@ if sublime.platform() == "osx":
 elif sublime.platform() == "windows":
     from . import keyboard
 elif sublime.platform() == "linux":
-    from xdotool import xdotool
+    from . import keyboard
 
 
 class KeypressCommand(sublime_plugin.WindowCommand):
@@ -56,6 +56,6 @@ class KeypressCommand(sublime_plugin.WindowCommand):
 
         elif sublime.platform() == "linux":
             if string:
-                xdotool("type", string)
+                keyboard.write(string)
             elif key:
-                xdotool("key", key)
+                keyboard.press_and_release(key)
