@@ -1,12 +1,10 @@
 import sublime
 import sublime_plugin
 
-from .keys import canonicalize_key
-
 if sublime.platform() == "osx":
     from . import osx_keypress
 elif sublime.platform() == "windows":
-    from . import keyboard
+    from . import windows_keypress
 elif sublime.platform() == "linux":
     from xdotool import xdotool
 
@@ -18,11 +16,7 @@ class KeypressCommand(sublime_plugin.WindowCommand):
         key: a string of keymap in Sublime Text style.
         """
 
-        if key:
-            key = canonicalize_key(key)
-        elif string:
-            pass
-        else:
+        if not key and not string:
             raise ValueError("Need either `string` or `key` argument.")
 
         if sublime.platform() == "osx":
@@ -33,9 +27,9 @@ class KeypressCommand(sublime_plugin.WindowCommand):
 
         elif sublime.platform() == "windows":
             if string:
-                keyboard.write(string)
+                windows_keypress.write(string)
             elif key:
-                keyboard.press_and_release(key)
+                windows_keypress.press(key)
 
         elif sublime.platform() == "linux":
             if string:
