@@ -1,12 +1,6 @@
-import sublime
 import sublime_plugin
 
-if sublime.platform() == "osx":
-    from . import osx_keypress as kp
-elif sublime.platform() == "windows":
-    from . import windows_keypress as kp
-elif sublime.platform() == "linux":
-    from . import linux_keypress as kp
+from . import platform_keypress
 
 
 class KeypressCommand(sublime_plugin.WindowCommand):
@@ -20,6 +14,6 @@ class KeypressCommand(sublime_plugin.WindowCommand):
             raise ValueError("Need either `string` or `key` argument.")
 
         if string:
-            kp.write(string)
+            platform_keypress.write(string)
         elif key:
-            kp.press(key)
+            platform_keypress.press(key)
