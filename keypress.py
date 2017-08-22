@@ -2,11 +2,11 @@ import sublime
 import sublime_plugin
 
 if sublime.platform() == "osx":
-    from . import osx_keypress
+    from . import osx_keypress as kp
 elif sublime.platform() == "windows":
-    from . import windows_keypress
+    from . import windows_keypress as kp
 elif sublime.platform() == "linux":
-    from xdotool import xdotool
+    from . import linux_keypress as kp
 
 
 class KeypressCommand(sublime_plugin.WindowCommand):
@@ -19,20 +19,7 @@ class KeypressCommand(sublime_plugin.WindowCommand):
         if not key and not string:
             raise ValueError("Need either `string` or `key` argument.")
 
-        if sublime.platform() == "osx":
-            if string:
-                osx_keypress.write(string)
-            elif key:
-                osx_keypress.press(key)
-
-        elif sublime.platform() == "windows":
-            if string:
-                windows_keypress.write(string)
-            elif key:
-                windows_keypress.press(key)
-
-        elif sublime.platform() == "linux":
-            if string:
-                xdotool("type", string)
-            elif key:
-                xdotool("key", key)
+        if string:
+            kp.write(string)
+        elif key:
+            kp.press(key)
