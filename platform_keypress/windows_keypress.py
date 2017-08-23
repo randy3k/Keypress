@@ -1,4 +1,4 @@
-from . import keyboard
+from .. import keyboard
 
 
 win_keyname = {
